@@ -1,0 +1,7 @@
+.is-invalid {
+    border: 1px solid #e27272;
+}
+
+.text-invalid {
+    color: #e27272;
+}
