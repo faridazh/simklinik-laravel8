@@ -6,24 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Consultation extends Model
+class Invoice extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'invoice',
         'code',
-        'norm',
-        'nama',
-        'tanggal',
-        'anamnesis',
-        'diagnosa',
-        'diagnosalain',
-        'tindakan',
-        'resep',
-        'dokterjaga',
+        'total',
+        'payment_method',
+        'status',
     ];
 
     protected $hidden = [
+        'created_at',
         'updated_at',
         'deleted_at',
     ];

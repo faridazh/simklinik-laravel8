@@ -18,12 +18,13 @@ class SettingSeeder extends Seeder
 
         $data = [
             // TEXT
-            // ['name' => '', 'value' => ''],
+            // ['name' => '', 'value' => '', 'created_at' => $timeNow, 'updated_at' => $timeNow],
 
             // Website
             ['name' => 'webname', 'value' => 'SIM Klinik', 'created_at' => $timeNow, 'updated_at' => $timeNow],
             ['name' => 'weblogo', 'value' => '', 'created_at' => $timeNow, 'updated_at' => $timeNow],
             ['name' => 'favicon', 'value' => '', 'created_at' => $timeNow, 'updated_at' => $timeNow],
+            ['name' => 'darkmode', 'value' => 'on', 'created_at' => $timeNow, 'updated_at' => $timeNow],
 
             // Dokter
             ['name' => 'dokterjaga', 'value' => '', 'created_at' => $timeNow, 'updated_at' => $timeNow],

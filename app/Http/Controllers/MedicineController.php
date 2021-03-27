@@ -45,8 +45,6 @@ class MedicineController extends Controller
             $obats = Medicine::orderBy($sortby, $orderby)->paginate($page);
         }
 
-        // $setting = Setting::select('value')->get();
-
         return view('obat.index', [
             'pagetitle' => 'Data Obat',
             'pagedesc' => 'Menampilkan seluruh data obat',
@@ -185,6 +183,45 @@ class MedicineController extends Controller
 
         Alert::toast('Data berhasil dihapus!', 'success');
         return redirect()->route('obat_index');
+    }
+
+    public function sisastok(Request $request)
+    {
+        $page = 25;
+
+        if($request->has('sortby') && $request->has('orderby'))
+        {
+            $sortby = $request->sorby;
+            $orderby = $request->orderby;
+        }
+        else
+        {
+            $sortby = 'code';
+            $orderby = 'asc';
+        }
+
+        if ($request->has('cari'))
+        {
+            $obats = Medicine::where('stok', '<=', 5)
+                                ->where('code','LIKE','%'.$request->cari.'%')
+                                ->orwhere('namaobat','LIKE','%'.$request->cari.'%')
+                                ->orwhere('isiobat','LIKE','%'.$request->cari.'%')
+                                ->orwhere('golongan','LIKE','%'.$request->cari.'%')
+                                ->orwhere('jenis','LIKE','%'.$request->cari.'%')
+                            ->orderBy($sortby, $orderby)
+                            ->paginate($page);
+        }
+        else
+        {
+            $obats = Medicine::where('stok', '<=', 5)->orderBy($sortby, $orderby)->paginate($page);
+        }
+
+        return view('obat.sisastok', [
+            'pagetitle' => 'Data Stok Obat',
+            'pagedesc' => 'Menampilkan seluruh data obat dengan sisa stok yang akan habis',
+            'pageid' => 'dataobat',
+            'obats' => $obats,
+        ]);
     }
 
     public function get_error()

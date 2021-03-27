@@ -20,6 +20,7 @@ class CreateConsultationsTable extends Migration
             $table->string('diagnosalain')->nullable();
             $table->string('tindakan')->nullable();
             $table->enum('resep', ['Tidak', 'Belum', 'Sedang', 'Sudah'])->default('Belum');
+            $table->string('dokterjaga');
 
             $table->timestamps();
             $table->softDeletes();

@@ -37,7 +37,7 @@
                     <td class="font-medium">{{ $dokter->dokterid }}</td>
                     <td class="flex justify-center items-center">
                         <div class="w-6 h-6 mr-5">
-                            <img class="rounded-full" src="{{asset('uploads/dokter').'/'.$dokter->photo}}" onerror="this.src='{{asset('uploads/avatar/default_avatar.png')}}';">
+                            <img class="rounded-full" src="{{asset('uploads/dokter').'/'.$dokter->photo}}" onerror="this.src='{{asset('assets/images/default_avatar.png')}}';">
                         </div>
                         <div>{{ $dokter->namagelar }}</div>
                     </td>

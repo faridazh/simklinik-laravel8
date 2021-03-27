@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\AntrianController;
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\DiseaseController;
@@ -11,6 +12,9 @@ use App\Http\Controllers\PasienController;
 use App\Http\Controllers\ResepController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
+
+// Dark Mode
+Route::get('/dark', [PageController::class, 'darkmode'])->name('darkmode');
 
 // Halaman Non-Member/Guest
 Route::get('/', [PageController::class, 'home'])->name('home');
@@ -189,6 +193,7 @@ Route::group(['middleware' => ['auth']], function() {
             Route::post('/obat', [MedicineController::class, 'store'])->name('_store');
             Route::get('/obat/edit/{obat}', [MedicineController::class, 'edit'])->name('_edit');
             Route::patch('/obat/update/{obat}', [MedicineController::class, 'update'])->name('_update');
+            Route::get('/obat/stok', [MedicineController::class, 'sisastok'])->name('_stok');
             # Method Error Handle
             Route::get('/obat/update/{obat}', [MedicineController::class, 'get_error']);
         });
@@ -197,8 +202,10 @@ Route::group(['middleware' => ['auth']], function() {
             Route::get('/resep', [ResepController::class, 'index'])->name('_index');
             Route::get('/resep/{resep}', [ResepController::class, 'show'])->name('_show');
             Route::post('/resep/confirm/{resep}', [ResepController::class, 'resep_confirm'])->name('_confirm');
+            Route::post('/resep/antrian/{resep}', [ResepController::class, 'update_antrian'])->name('_update_antrian');
             # Method Error Handle
             Route::get('/resep/confirm/{resep}', [ResepController::class, 'get_error']);
+            Route::get('/resep/antrian/{resep}', [ResepController::class, 'get_error']);
         });
     });
 });

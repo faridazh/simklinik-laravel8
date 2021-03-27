@@ -14,7 +14,7 @@ class AntrianController extends Controller
 {
     public function index()
     {
-        $antrians = Antrian::orderBy('antrian', 'asc')->get();
+        $antrians = Antrian::orderBy('antrian', 'asc')->where('status', 'Belum')->orwhere('status', 'Sedang')->get();
 
         return view('registrasi.index', [
             'pagetitle' => 'Registrasi',
@@ -42,11 +42,6 @@ class AntrianController extends Controller
             $length = 4;
             $prefix = 'C';
         }
-        elseif($data == 'Laboratorium')
-        {
-            $length = 4;
-            $prefix = 'D';
-        }
 
         $config = [
             'table' => 'antrians',
@@ -61,7 +56,7 @@ class AntrianController extends Controller
 
     public function store(Request $request)
     {
-        if (Antrian::where('norm', $request->norm)->where('jenis', $request->jenis)->exists()) {
+        if (Antrian::where('norm', $request->norm)->where('jenis', $request->jenis)->where('status', 'Belum')->orwhere('status', 'Sedang')->exists()) {
             Alert::toast('Pasien sudah dalam antrian!', 'error');
             return redirect()->route('registrasi_index');
         }

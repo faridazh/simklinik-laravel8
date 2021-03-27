@@ -5,7 +5,7 @@
     <div class="flex flex-col lg:flex-row border-b border-gray-200 dark:border-dark-5">
         <div class="flex flex-1 p-5 items-center justify-center lg:justify-start">
             <div class="w-16 h-16 sm:w-24 sm:h-24 flex-none lg:w-32 lg:h-32 image-fit relative">
-                <img class="rounded-full" src="{{asset('uploads/avatar'.'/'.$pegawai->avatar)}}" onerror="this.src='{{asset('uploads/avatar/default_avatar.png')}}';">
+                <img class="rounded-full" src="{{asset('uploads/avatar'.'/'.$pegawai->avatar)}}" onerror="this.src='{{asset('assets/images/default_avatar.png')}}';">
             </div>
             <div class="ml-5">
                 <div class="sm:whitespace-normal font-medium text-lg lg:text-3xl">{{$pegawai->username}}</div>

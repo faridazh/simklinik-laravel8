@@ -7,6 +7,8 @@ use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 
+use Illuminate\Support\Facades\Cache;
+
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -27,6 +29,10 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        if (Cache::has('darkmode')) {
+            if (config('setting.darkmode') == 'off') {
+                Cache::pull('darkmode');
+            }
+        }
     }
 }

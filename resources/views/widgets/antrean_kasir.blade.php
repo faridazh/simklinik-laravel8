@@ -3,7 +3,7 @@
         <div class="flex">
             <i class="fad fa-cash-register fa-fw text-4xl font-medium"></i>
             <div class="ml-auto">
-                <div class="text-4xl font-bold text-theme-1">@if(isset($antrean)) $antrean->antrian @else - @endif</div>
+                <div class="text-4xl font-bold text-theme-1">@if(isset($antrean)) {{$antrean->antrian}} @else - @endif</div>
             </div>
         </div>
         @if(isset($antrean))

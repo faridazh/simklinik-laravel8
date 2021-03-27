@@ -10,7 +10,7 @@
             @csrf
             <div>
                 <label for="inputRM" class="form-label font-medium">No. RM</label>
-                <input type="text" class="form-control @error('norm') is-invalid @enderror" id="inputRM" name="norm">
+                <input type="text" class="form-control text-center @error('norm') is-invalid @enderror" id="inputRM" name="norm">
             </div>
             <div class="mt-3">
                 <label for="inputJenis" class="form-label font-medium">Jenis Antrean</label>

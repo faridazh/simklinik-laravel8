@@ -6,33 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateTransactionsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
 
             $table->char('invoice');
-            $table->char('norm');
+            $table->char('code', 6);
             $table->string('isibon');
+            $table->integer('quantity');
+            $table->integer('harga');
             $table->integer('total');
-            $table->string('');
-            $table->enum('payment_method', ['Tunai','Transfer Bank','Kartu Kredit','Dana','OVO','GoPay',]);
 
             $table->timestamps();
             $table->softDeletes();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('transactions');

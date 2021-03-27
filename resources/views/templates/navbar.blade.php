@@ -1,5 +1,5 @@
 <nav class="side-nav">
-    <a href="" class="flex items-center pl-5 pt-4">
+    <a href="{{route('dashboard')}}" class="flex items-center pl-5 pt-4">
         <img class="w-6" src="{{ asset('uploads/images'.'/'.config('setting.weblogo')) }}" onerror="this.src='{{asset('assets/images/logo.png')}}';">
         <span class="hidden xl:block text-white text-lg ml-3 font-medium">{{ config('setting.webname') }}</span>
     </a>
@@ -100,15 +100,23 @@
             </ul>
         </li>
         @endstaff
+        @dokter
+        <li>
+            <a href="{{route('konsultasi_index')}}" class="side-menu side-menu{{Request::routeIs('konsultasi_index','konsultasi_create','konsultasi_show','konsultasi_resep','konsultasi_show_resep','konsultasi_list') ? '--active' : ''}}">
+                <div class="side-menu__icon"><i class="fal fa-stethoscope fa-fw text-2xl"></i></div>
+                <div class="side-menu__title">Konsultasi</div>
+            </a>
+        </li>
+        @enddokter
         @apoteker
         <li>
-            <a href="javascript:;" class="side-menu side-menu{{Request::routeIs('obat_index','obat_edit','obat_create') ? '--active' : ''}}">
+            <a href="javascript:;" class="side-menu side-menu{{Request::routeIs('obat_index','obat_edit','obat_create','obat_stok') ? '--active' : ''}}">
                 <div class="side-menu__icon"><i class="fal fa-capsules fa-fw text-2xl"></i></div>
                 <div class="side-menu__title">Obat
                     <div class="side-menu__sub-icon"><i data-feather="chevron-down"></i></div>
                 </div>
             </a>
-            <ul class="{{Request::routeIs('obat_index','obat_edit','obat_create') ? 'side-menu__sub-open' : ''}}">
+            <ul class="{{Request::routeIs('obat_index','obat_edit','obat_create','obat_stok') ? 'side-menu__sub-open' : ''}}">
                 <li>
                     <a href="{{route('obat_create')}}" class="side-menu side-menu{{Request::routeIs('obat_create') ? '--active' : ''}}">
                         <div class="side-menu__icon"><i class="{{Request::routeIs('obat_create') ? 'fas' : 'fal'}} fa-plus fa-fw text-lg"></i></div>
@@ -119,6 +127,12 @@
                     <a href="{{route('obat_index')}}" class="side-menu side-menu{{Request::routeIs('obat_index','obat_edit') ? '--active' : ''}}">
                         <div class="side-menu__icon"><i class="{{Request::routeIs('obat_index','obat_edit') ? 'fas' : 'fal'}} fa-dot-circle fa-fw text-lg"></i></div>
                         <div class="side-menu__title">Data Obat</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{route('obat_stok')}}" class="side-menu side-menu{{Request::routeIs('obat_stok') ? '--active' : ''}}">
+                        <div class="side-menu__icon"><i class="{{Request::routeIs('obat_stok') ? 'fas' : 'fal'}} fa-dot-circle fa-fw text-lg"></i></div>
+                        <div class="side-menu__title">Stok Obat</div>
                     </a>
                 </li>
             </ul>
@@ -148,14 +162,6 @@
             </ul>
         </li>
         @endresepsionis
-        @dokter
-        <li>
-            <a href="{{route('konsultasi_index')}}" class="side-menu side-menu{{Request::routeIs('konsultasi_index','konsultasi_create','konsultasi_show','konsultasi_resep','konsultasi_show_resep','konsultasi_list') ? '--active' : ''}}">
-                <div class="side-menu__icon"><i class="fal fa-stethoscope fa-fw text-2xl"></i></div>
-                <div class="side-menu__title">Konsultasi</div>
-            </a>
-        </li>
-        @enddokter
         @staff
         <li>
             <a href="javascript:;" class="side-menu side-menu{{Request::routeIs('penyakit_index','penyakit_show','penyakit_edit') ? '--active' : ''}}">

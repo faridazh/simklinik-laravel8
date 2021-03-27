@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Cache;
 
 use App\Models\Setting;
 
@@ -49,5 +50,9 @@ class AppServiceProvider extends ServiceProvider
                 Config::set('setting.'.$setting->name, $setting->value);
             }
         }
+
+        Blade::if('dark', function () {
+            return Cache::has('darkmode');
+        });
     }
 }

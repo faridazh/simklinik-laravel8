@@ -35,6 +35,21 @@ class SettingController extends Controller
             'favicon' => 'nullable|image|mimes:jpg,jpeg,png,bmp,gif,webp|max:' . $icon_maxSize,
         ]);
 
+        if ($request->has('darkmode')) {
+            $request->validate([
+                'darkmode' => 'required|in:on'
+            ]);
+
+            Setting::where('name', 'darkmode')->update([
+                'value' => 'on',
+            ]);
+        }
+        else {
+            Setting::where('name', 'darkmode')->update([
+                'value' => 'off',
+            ]);
+        }
+
         if ($request->webname != config('setting.webname')) {
             Setting::where('name', 'webname')->update([
                 'value' => $request->webname,

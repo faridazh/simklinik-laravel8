@@ -25,6 +25,14 @@
                         <input type="file" name="favicon" accept="image/x-png,image/gif,image/jpeg" class="form-control @error('favicon') is-invalid @enderror">
                         <div class="form-help @error('favicon') text-invalid @enderror">* Maksimal {{ $icon_maxSize }}</div>
                     </div>
+                    <div class="mt-5">
+                        <label for="inputDark" class="form-label">Dark Mode</label>
+                        <div class="form-check mt-1">
+                            <span class="form-check-label ml-0">OFF</span>
+                            <input id="inputDark" class="form-check-switch ml-3 mr-1 @error('darkmode') text-invalid @enderror" type="checkbox" name="darkmode" @if(config('setting.darkmode') == 'on') checked @endif>
+                            <span class="form-check-label">ON</span>
+                        </div>
+                    </div>
                     <div class="mt-5 flex justify-end">
                         <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt mr-2"></i> Perbarui</button>
                     </div>
@@ -94,7 +102,7 @@
                     @method('patch')
                     <div>
                         <label for="inputCurrency" class="form-label">Mata Uang</label>
-                        <input id="inputCurrency" type="text" class="form-control @error('currency') is-invalid @enderror" name="currency" value="{{ config('setting.currency') || 'Rp.' }}">
+                        <input id="inputCurrency" type="text" class="form-control @error('currency') is-invalid @enderror" name="currency" value="{{ config('setting.currency') ?? 'Rp.' }}">
                     </div>
                     <div class="mt-5 flex justify-end">
                         <button type="submit" class="btn btn-primary"><i class="fas fa-sync-alt mr-2"></i> Perbarui</button>

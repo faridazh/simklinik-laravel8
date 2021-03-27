@@ -84,6 +84,11 @@ class ConsultationController extends Controller
 
     public function create()
     {
+        if (config('setting.dokterjaga') == null) {
+            Alert::toast('Belum ada dokter jaga!', 'error');
+            return redirect()->route('konsultasi_index');
+        }
+
         $antrian = Antrian::orderBy('antrian', 'desc')->where('jenis', 'Dokter')->where('status', 'Sedang')->select('norm','nama')->first();
 
         if (empty($antrian)) {
@@ -130,7 +135,7 @@ class ConsultationController extends Controller
             'prefix' => 'RM'
         ];
 
-        return $coderm = IdGenerator::generate($config);
+        return IdGenerator::generate($config);
     }
 
     public function store(Request $request)
@@ -153,19 +158,19 @@ class ConsultationController extends Controller
             'resep' => 'required|in:Tidak,Belum',
         ]);
 
-        $antrian = Antrian::orderBy('antrian', 'asc')->where('norm', $request->norm)->where('deleted_at', null);
+        $antrian = Antrian::orderBy('antrian', 'asc')->where('norm', $request->norm)->where('jenis', 'Dokter')->where('status', 'Sedang');
 
         if ($antrian->count() == 1) {
+            Pasien::where('norm', $antrian->first()->norm)->update([
+                'rmringan' => strval($request->berat . ',' . $request->tinggi . ',' . $request->tensi_sistol . ',' . $request->tensi_diastol . ',' . $request->tensi_pulse),
+            ]);
+
             $antrian->update(['status' => 'Sudah']);
         }
         else {
             Alert::toast('Error, silahkan periksa kembali!', 'error');
             return redirect()->route('konsultasi_create');
         }
-
-        Pasien::where('norm', $antrian->first()->norm)->update([
-            'rmringan' => strval($request->berat . ',' . $request->tinggi . ',' . $request->tensi_sistol . ',' . $request->tensi_diastol . ',' . $request->tensi_pulse),
-        ]);
 
         $coderm = $this->genRMcode();
 
@@ -178,13 +183,12 @@ class ConsultationController extends Controller
             'diagnosa' => $request->diagnosa,
             'tindakan' => $request->tindakan,
             'resep' => $request->resep,
+            'dokterjaga' => config('setting.dokterjaga'),
         ]);
 
-        Antrian::destroy($antrian->first()->id);
-
-        $rm = Consultation::where('code', $coderm)->select('id')->first();
-
         if ($request->resep == 'Belum') {
+            $rm = Consultation::where('code', $coderm)->select('id')->first();
+
             Alert::toast('Silahkan tulis resep untuk pasien!', 'info');
             return redirect()->route('konsultasi_resep', $rm->id);
         }
@@ -386,10 +390,28 @@ class ConsultationController extends Controller
             return redirect()->route('konsultasi_index');
         }
 
+        $config = [
+            'table' => 'antrians',
+            'field' => 'antrian',
+            'length' => 4,
+            'prefix' => 'B',
+            'reset_on_prefix_change' => TRUE,
+        ];
+        $noAntri = IdGenerator::generate($config);
+
         Consultation::where('id', $id)
                         ->update([
                             'resep' => 'Sedang',
                         ]);
+
+        $consultation = Consultation::where('id', $id)->where('resep', 'Sedang')->first();
+
+        Antrian::create([
+            'antrian' => $noAntri,
+            'jenis' => 'Apotek',
+            'norm' => $consultation->norm,
+            'nama' => $consultation->nama,
+        ]);
 
         Alert::toast('Resep berhasil dibuat!', 'success');
         return redirect()->route('konsultasi_index');

@@ -210,9 +210,7 @@
                             <div class="box px-5 py-3 mb-3 flex items-center zoom-in">
                                 <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
                                     @if(isset($photo_dokter))
-                                    <img src="{{asset('uploads/dokter').'/'.$photo_dokter->photo}}">
-                                    @else
-                                    <img src="{{asset('uploads/avatar/default_avatar.png')}}">
+                                    <img src="{{asset('uploads/dokter').'/'.$photo_dokter->photo}}" onerror="this.src='{{asset('assets/images/default_avatar.png')}}';">
                                     @endif
                                 </div>
                                 <div class="ml-4 mr-auto">
@@ -223,6 +221,27 @@
                     </div>
                 </div>
                 <!-- END DOKTER JAGA -->
+                <!-- START STOK OBAT -->
+                <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mt-3">
+                    <div class="intro-x flex items-center h-10">
+                        <h2 class="text-lg font-medium truncate mr-5">Stok Obat</h2>
+                    </div>
+                    <div class="mt-5">
+                        @foreach($obats as $obat)
+                        <div class="intro-x">
+                            <div class="box px-5 py-3 mb-3 flex items-center zoom-in">
+                                <div class="mr-auto">
+                                    <div class="font-medium">{{ $obat->namaobat }}</div>
+                                    <div class="text-gray-600 text-xs mt-0.5">{{ $obat->isiobat }}</div>
+                                </div>
+                                <div class="font-medium"><span class="text-theme-6">{{ $obat->stok }}</span>&nbsp;{{ $obat->jenis }}</div>
+                            </div>
+                        </div>
+                        @endforeach
+                        <a href="{{route('obat_stok')}}" class="intro-x w-full block text-center rounded-md py-3 border border-dotted border-theme-15 dark:border-dark-5 text-theme-16 dark:text-gray-600">Lainnya</a>
+                    </div>
+                </div>
+                <!-- END STOK OBAT -->
                 <!-- START TRAKSAKSI -->
                 <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mt-3">
                     <div class="intro-x flex items-center h-10">
@@ -241,55 +260,7 @@
                                 <div class="text-theme-9">+$128</div>
                             </div>
                         </div>
-                        <div class="intro-x">
-                            <div class="box px-5 py-3 mb-3 flex items-center zoom-in">
-                                <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
-                                    <img alt="Midone Tailwind HTML Admin Template" src="dist/images/profile-9.jpg">
-                                </div>
-                                <div class="ml-4 mr-auto">
-                                    <div class="font-medium">John Travolta</div>
-                                    <div class="text-gray-600 text-xs mt-0.5">3 June 2022</div>
-                                </div>
-                                <div class="text-theme-9">+$40</div>
-                            </div>
-                        </div>
-                        <div class="intro-x">
-                            <div class="box px-5 py-3 mb-3 flex items-center zoom-in">
-                                <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
-                                    <img alt="Midone Tailwind HTML Admin Template" src="dist/images/profile-11.jpg">
-                                </div>
-                                <div class="ml-4 mr-auto">
-                                    <div class="font-medium">Kevin Spacey</div>
-                                    <div class="text-gray-600 text-xs mt-0.5">4 April 2021</div>
-                                </div>
-                                <div class="text-theme-9">+$49</div>
-                            </div>
-                        </div>
-                        <div class="intro-x">
-                            <div class="box px-5 py-3 mb-3 flex items-center zoom-in">
-                                <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
-                                    <img alt="Midone Tailwind HTML Admin Template" src="dist/images/profile-11.jpg">
-                                </div>
-                                <div class="ml-4 mr-auto">
-                                    <div class="font-medium">Johnny Depp</div>
-                                    <div class="text-gray-600 text-xs mt-0.5">15 November 2022</div>
-                                </div>
-                                <div class="text-theme-6">-$35</div>
-                            </div>
-                        </div>
-                        <div class="intro-x">
-                            <div class="box px-5 py-3 mb-3 flex items-center zoom-in">
-                                <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
-                                    <img alt="Midone Tailwind HTML Admin Template" src="dist/images/profile-2.jpg">
-                                </div>
-                                <div class="ml-4 mr-auto">
-                                    <div class="font-medium">John Travolta</div>
-                                    <div class="text-gray-600 text-xs mt-0.5">13 December 2020</div>
-                                </div>
-                                <div class="text-theme-6">-$26</div>
-                            </div>
-                        </div>
-                        <a href="" class="intro-x w-full block text-center rounded-md py-3 border border-dotted border-theme-15 dark:border-dark-5 text-theme-16 dark:text-gray-600">View More</a>
+                        <a href="javascript;" class="intro-x w-full block text-center rounded-md py-3 border border-dotted border-theme-15 dark:border-dark-5 text-theme-16 dark:text-gray-600">Lainnya</a>
                     </div>
                 </div>
                 <!-- END TRANSAKSI -->
@@ -335,7 +306,11 @@
                     {
                         ticks: {
                             fontSize: "12",
+                            @dark
+                            fontColor: "#718096",
+                            @else
                             fontColor: "#777777",
+                            @enddark
                         },
                         gridLines: {
                             display: false,
@@ -346,11 +321,20 @@
                     {
                         ticks: {
                             fontSize: "12",
+                            @dark
+                            fontColor: "#718096",
+                            @else
                             fontColor: "#777777",
+                            @enddark
                         },
                         gridLines: {
+                            @dark
+                            color: "#718096",
+                            zeroLineColor: "#718096",
+                            @else
                             color: "#D8D8D8",
                             zeroLineColor: "#D8D8D8",
+                            @enddark
                             borderDash: [2, 2],
                             zeroLineBorderDash: [2, 2],
                             drawBorder: false,
@@ -374,6 +358,11 @@
                 backgroundColor: ['#FFB6C1', '#3CB371', '#F08080', '#BDB76B'],
                 hoverBackgroundColor: ['#FFB6C1', '#3CB371', '#F08080', '#BDB76B'],
                 borderWidth: 5,
+                @dark
+                borderColor: '#313A55',
+                @else
+                borderColor: '#FFFFFF',
+                @enddark
             }]
         },
         options: {
@@ -396,6 +385,11 @@
                 backgroundColor: ['#87CEFA', '#FF69B4'],
                 hoverBackgroundColor: ['#87CEFA', '#FF69B4'],
                 borderWidth: 5,
+                @dark
+                borderColor: '#313A55',
+                @else
+                borderColor: '#FFFFFF',
+                @enddark
             }]
         },
         options: {

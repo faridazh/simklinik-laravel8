@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
-use App\Models\Pasien;
 use App\Models\Dokter;
+use App\Models\Medicine;
+use App\Models\Pasien;
 
 use Illuminate\Http\Request;
 
@@ -105,6 +107,8 @@ class PageController extends Controller
 
         $dokterPhoto = Dokter::where('namagelar', config('setting.dokterjaga'))->select('photo')->first();
 
+        $obats = Medicine::where('stok', '<=', 5)->select('namaobat','isiobat','stok','jenis')->orderBy('updated_at', 'desc')->limit(5)->get();
+
         return view('dashboard', [
             'pagetitle' => 'Dashboard',
             'pagedesc' => 'Halaman utama',
@@ -115,6 +119,7 @@ class PageController extends Controller
             'age_pasien' => $this->pasien_age(),
             'gender_pasien' => $this->gender_pasien(),
             'photo_dokter' => $dokterPhoto,
+            'obats' => $obats,
         ]);
     }
 
@@ -139,6 +144,20 @@ class PageController extends Controller
             'pagedesc' => '',
             'pageid' => 'about',
         ]);
+    }
+
+    public function darkmode()
+    {
+        if (config('setting.darkmode') == 'on') {
+            if (Cache::has('darkmode')) {
+                Cache::pull('darkmode');
+            }
+            else {
+                Cache::put('darkmode', 'dark');
+            }
+        }
+
+        return redirect()->back();
     }
 
     public function get_error()
