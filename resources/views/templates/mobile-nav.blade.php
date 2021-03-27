@@ -101,6 +101,14 @@
             </ul>
         </li>
         @endstaff
+        @kasir
+        <li>
+            <a href="{{route('invoice_index')}}" class="menu menu{{Request::routeIs('invoice_index','invoice_show') ? '--active' : ''}}">
+                <div class="menu__icon"><i class="fal fa-cash-register fa-fw text-lg"></i></div>
+                <div class="menu__title">Kasir</div>
+            </a>
+        </li>
+        @endkasir
         @dokter
         <li>
             <a href="{{route('konsultasi_index')}}" class="menu menu{{Request::routeIs('konsultasi_index','konsultasi_create','konsultasi_show','konsultasi_resep','konsultasi_show_resep','konsultasi_list') ? '--active' : ''}}">

@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Antrian;
 use App\Models\Consultation;
 use App\Models\Disease;
+use App\Models\Invoice;
 use App\Models\Medicine;
 use App\Models\Pasien;
 use App\Models\Resep;
+use App\Models\Transaction;
 use App\Models\User;
 
 use Illuminate\Http\Request;
@@ -72,7 +74,11 @@ class ConsultationController extends Controller
 
     public function update_antrian($antrian)
     {
-        if (!Antrian::where('antrian', $antrian)->exists()) {
+        if (config('setting.dokterjaga') == null) {
+            Alert::toast('Belum ada dokter jaga!', 'error');
+            return redirect()->route('konsultasi_index');
+        }
+        elseif (!Antrian::where('antrian', $antrian)->exists()) {
             Alert::toast('Antrian tidak tersedia!', 'error');
             return redirect()->route('konsultasi_index');
         }
@@ -138,6 +144,34 @@ class ConsultationController extends Controller
         return IdGenerator::generate($config);
     }
 
+    private function invoice($coderm)
+    {
+        $config = [
+            'table' => 'invoices',
+            'field' => 'invoice',
+            'length' => 12,
+            'prefix' => date('Ymd'),
+            'reset_on_prefix_change' => TRUE,
+        ];
+        $invoice = IdGenerator::generate($config);
+
+        Transaction::create([
+            'invoice' => $invoice,
+            'code' => $coderm,
+            'isibon' => 'Fee Dokter - ' . config('setting.dokterjaga'),
+            'quantity' => 1,
+            'harga' => config('setting.fee_dokter'),
+            'total' => config('setting.fee_dokter'),
+        ]);
+
+        Invoice::create([
+            'invoice' => $invoice,
+            'code' => $coderm,
+            'total' => Transaction::where('invoice', $invoice)->sum('total'),
+            'status' => 'Belum Bayar'
+        ]);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -191,6 +225,9 @@ class ConsultationController extends Controller
 
             Alert::toast('Silahkan tulis resep untuk pasien!', 'info');
             return redirect()->route('konsultasi_resep', $rm->id);
+        }
+        else {
+            $this->invoice($coderm);
         }
 
         Alert::toast('Rekam medis berhasil ditambahkan!', 'success');

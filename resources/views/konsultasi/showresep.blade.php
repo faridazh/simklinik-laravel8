@@ -25,7 +25,9 @@
         </tbody>
     </table>
     <div class="mt-10">Status Resep:
-        @if($consultation->resep == 'Belum')
+        @if($consultation->resep == 'Tidak')
+        <span class="px-2 py-1 text-xs px-1 bg-theme-1 font-medium text-white rounded">{{ $consultation->resep }}</span>
+        @elseif($consultation->resep == 'Belum')
         <span class="px-2 py-1 text-xs px-1 bg-theme-6 font-medium text-white rounded">{{ $consultation->resep }}</span>
         @elseif($consultation->resep == 'Sedang')
         <span class="px-2 py-1 text-xs px-1 bg-theme-12 font-medium text-gray-700 dark:text-gray-600 rounded">{{ $consultation->resep }}</span>

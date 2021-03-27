@@ -223,6 +223,7 @@
                     </div>
                 </div>
                 <!-- END DOKTER JAGA -->
+                @if($obats->count() != 0)
                 <!-- START STOK OBAT -->
                 <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mt-3">
                     <div class="intro-x flex items-center h-10">
@@ -244,6 +245,7 @@
                     </div>
                 </div>
                 <!-- END STOK OBAT -->
+                @endif
                 <!-- START TRAKSAKSI -->
                 <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mt-3">
                     <div class="intro-x flex items-center h-10">

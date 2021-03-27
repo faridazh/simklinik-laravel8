@@ -37,7 +37,10 @@ Breadcrumbs::for('dokter_edit', function ($trail, $id) {
 
 
 // Kasir
-
+Breadcrumbs::for('invoice_index', function ($trail) {
+    $trail->parent('dashboard');
+    $trail->push('Invoice', route('invoice_index'));
+});
 
 // Konsultasi
 Breadcrumbs::for('konsultasi_index', function ($trail) {

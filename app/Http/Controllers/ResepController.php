@@ -183,6 +183,15 @@ class ResepController extends Controller
             ]);
         }
 
+        Transaction::create([
+            'invoice' => $invoice,
+            'code' => $code,
+            'isibon' => 'Fee Dokter - ' . config('setting.dokterjaga'),
+            'quantity' => 1,
+            'harga' => config('setting.fee_dokter'),
+            'total' => config('setting.fee_dokter'),
+        ]);
+
         Invoice::create([
             'invoice' => $invoice,
             'code' => $code,

@@ -6,6 +6,7 @@ use App\Http\Controllers\AntrianController;
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\DiseaseController;
 use App\Http\Controllers\DokterController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PasienController;
@@ -26,14 +27,16 @@ Route::get('/login', [UserController::class, 'login'])->name('login');
 Route::post('/login', [UserController::class, 'postlogin'])->name('postlogin');
 //
 
-Route::group(['as' => 'antrean'], function() {
+Route::group(['as' => 'antrean'], function()
+{
     Route::get('/antrean/apotek', [AntrianController::class, 'antreanApotek'])->name('_apotek');
     Route::get('/antrean/dokter', [AntrianController::class, 'antreanDokter'])->name('_dokter');
     Route::get('/antrean/kasir', [AntrianController::class, 'antreanKasir'])->name('_kasir');
 });
 
 // Perlu Level Akses
-Route::group(['middleware' => ['auth']], function() {
+Route::group(['middleware' => ['auth']], function()
+{
     // Logout Page
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
     //
@@ -46,7 +49,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/antrean', [AntrianController::class, 'antrean'])->name('antrean');
     //
 
-    Route::group(['as' => 'myprofile'], function() {
+    Route::group(['as' => 'myprofile'], function()
+    {
         Route::get('/profile', [UserController::class, 'myprofile'])->name('_index');
         Route::get('/profile/edit', [UserController::class, 'edit_myprofile'])->name('_edit');
         Route::patch('/profile', [UserController::class, 'update_myprofile'])->name('_update');
@@ -57,8 +61,10 @@ Route::group(['middleware' => ['auth']], function() {
     });
 
     // Level: Administrator //
-    Route::group(['middleware' => ['ceklevel:admin']], function() {
-        Route::group(['as' => 'pegawai'], function() {
+    Route::group(['middleware' => ['ceklevel:admin']], function()
+    {
+        Route::group(['as' => 'pegawai'], function()
+        {
             Route::get('/pegawai', [UserController::class, 'index'])->name('_index');
             Route::get('/pegawai/create', [UserController::class, 'create'])->name('_create');
             Route::post('/pegawai', [UserController::class, 'store'])->name('_store');
@@ -75,7 +81,8 @@ Route::group(['middleware' => ['auth']], function() {
             Route::get('/pegawai/update_password/{pegawai}', [UserController::class, 'get_error']);
         });
 
-        Route::group(['as' => 'registrasi'], function() {
+        Route::group(['as' => 'registrasi'], function()
+        {
             Route::post('/registrasi/destroy_all', [AntrianController::class, 'destroy_all'])->name('_destroy_all');
             # Method Error Handle
             Route::get('/registrasi/destroy_all', [AntrianController::class, 'get_error']);
@@ -83,8 +90,10 @@ Route::group(['middleware' => ['auth']], function() {
     });
 
     // Level: Staff //
-    Route::group(['middleware' => ['ceklevel:staff']], function() {
-        Route::group(['as' => 'dokter'], function() {
+    Route::group(['middleware' => ['ceklevel:staff']], function()
+    {
+        Route::group(['as' => 'dokter'], function()
+        {
             Route::get('/dokter', [DokterController::class, 'index'])->name('_index');
             Route::get('/dokter/create', [DokterController::class, 'create'])->name('_create');
             Route::post('/dokter', [DokterController::class, 'store'])->name('_store');
@@ -97,19 +106,22 @@ Route::group(['middleware' => ['auth']], function() {
             Route::get('/dokter/delete/{dokter}', [DokterController::class, 'get_error']);
         });
 
-        Route::group(['as' => 'obat'], function() {
+        Route::group(['as' => 'obat'], function()
+        {
             Route::delete('/obat/delete/{obat}', [MedicineController::class, 'destroy'])->name('_destroy');
             # Method Error Handle
             Route::get('/obat/delete/{obat}', [MedicineController::class, 'get_error']);
         });
 
-        Route::group(['as' => 'resep'], function() {
+        Route::group(['as' => 'resep'], function()
+        {
             Route::delete('/resep/delete/{resep}', [ResepController::class, 'destroy'])->name('_destroy');
             # Method Error Handle
             Route::get('/resep/delete/{resep}', [ResepController::class, 'get_error']);
         });
 
-        Route::group(['as' => 'settings'], function() {
+        Route::group(['as' => 'settings'], function()
+        {
             Route::get('/settings', [SettingController::class, 'index'])->name('_index');
             Route::patch('/settings/update/website', [SettingController::class, 'update_website'])->name('_update_website');
             Route::patch('/settings/update/dokter', [SettingController::class, 'update_dokter'])->name('_update_dokter');
@@ -120,8 +132,10 @@ Route::group(['middleware' => ['auth']], function() {
     });
 
     // Level: Resepsionis //
-    Route::group(['middleware' => ['ceklevel:resepsionis']], function() {
-        Route::group(['as' => 'pasien'], function() {
+    Route::group(['middleware' => ['ceklevel:resepsionis']], function()
+    {
+        Route::group(['as' => 'pasien'], function()
+        {
             Route::get('/pasien', [PasienController::class, 'index'])->name('_index');
             Route::get('/pasien/create', [PasienController::class, 'create'])->name('_create');
             Route::post('/pasien', [PasienController::class, 'store'])->name('_store');
@@ -134,7 +148,8 @@ Route::group(['middleware' => ['auth']], function() {
             Route::get('/pasien/delete/{pasien}', [PasienController::class, 'get_error']);
         });
 
-        Route::group(['as' => 'registrasi'], function() {
+        Route::group(['as' => 'registrasi'], function()
+        {
             Route::get('/daftar', [AntrianController::class, 'index'])->name('_index');
             Route::post('/daftar', [AntrianController::class, 'store'])->name('_store');
             Route::delete('/daftar/delete/{antrian}', [AntrianController::class, 'destroy'])->name('_destroy');
@@ -144,8 +159,10 @@ Route::group(['middleware' => ['auth']], function() {
     });
 
     // Level: Dokter //
-    Route::group(['middleware' => ['ceklevel:dokter']], function() {
-        Route::group(['as' => 'konsultasi'], function() {
+    Route::group(['middleware' => ['ceklevel:dokter']], function()
+    {
+        Route::group(['as' => 'konsultasi'], function()
+        {
             Route::get('/konsultasi/medicine', [ConsultationController::class, 'cariobat'])->name('_cari_obat'); //AJAX
             Route::get('/konsultasi/penyakit', [ConsultationController::class, 'caripenyakit'])->name('_cari_penyakit'); //AJAX
             Route::post('/konsultasi/update_antrian/{antrian}', [ConsultationController::class, 'update_antrian'])->name('_update_antrian');
@@ -168,7 +185,8 @@ Route::group(['middleware' => ['auth']], function() {
             Route::get('/konsultasi/resep/delete', [ConsultationController::class, 'get_error']);
         });
 
-        Route::group(['as' => 'penyakit'], function() {
+        Route::group(['as' => 'penyakit'], function()
+        {
             Route::get('/penyakit', [DiseaseController::class, 'index'])->name('_index');
             Route::get('/penyakit/create', [DiseaseController::class, 'create'])->name('_create');
             Route::post('/penyakit', [DiseaseController::class, 'store'])->name('_store');
@@ -183,8 +201,10 @@ Route::group(['middleware' => ['auth']], function() {
     });
 
     // Level: Apoteker //
-    Route::group(['middleware' => ['ceklevel:apoteker']], function() {
-        Route::group(['as' => 'obat'], function() {
+    Route::group(['middleware' => ['ceklevel:apoteker']], function()
+    {
+        Route::group(['as' => 'obat'], function()
+        {
             Route::get('/obat', [MedicineController::class, 'index'])->name('_index');
             Route::get('/obat/create', [MedicineController::class, 'create'])->name('_create');
             Route::post('/obat', [MedicineController::class, 'store'])->name('_store');
@@ -195,7 +215,8 @@ Route::group(['middleware' => ['auth']], function() {
             Route::get('/obat/update/{obat}', [MedicineController::class, 'get_error']);
         });
 
-        Route::group(['as' => 'resep'], function() {
+        Route::group(['as' => 'resep'], function()
+        {
             Route::get('/resep', [ResepController::class, 'index'])->name('_index');
             Route::get('/resep/{resep}', [ResepController::class, 'show'])->name('_show');
             Route::post('/resep/confirm/{resep}', [ResepController::class, 'resep_confirm'])->name('_confirm');
@@ -203,6 +224,15 @@ Route::group(['middleware' => ['auth']], function() {
             # Method Error Handle
             Route::get('/resep/confirm/{resep}', [ResepController::class, 'get_error']);
             Route::get('/resep/antrian/{resep}', [ResepController::class, 'get_error']);
+        });
+    });
+
+    Route::group(['middleware' => ['ceklevel:kasir']], function()
+    {
+        Route::group(['as' => 'invoice'], function()
+        {
+            Route::get('/invoice', [InvoiceController::class, 'index'])->name('_index');
+            Route::get('/invoice/{invoice}', [InvoiceController::class, 'show'])->name('_show');
         });
     });
 });
