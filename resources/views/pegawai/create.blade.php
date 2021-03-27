@@ -1,5 +1,7 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('pegawai_create'))
+
 @section('content')
 <div class="box p-5">
     <form action="{{ route('pegawai_store') }}" method="post" class="grid grid-cols-12 gap-2">

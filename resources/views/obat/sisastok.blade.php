@@ -1,5 +1,7 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('obat_stok'))
+
 @section('content')
 <div class="flex mb-5">
     <form action="{{ route('obat_stok') }}" method="get" class="flex ml-auto search hidden sm:block">

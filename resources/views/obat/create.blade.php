@@ -1,5 +1,7 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('obat_create'))
+
 @section('content')
 <div class="box p-5">
     <form class="grid grid-cols-12 gap-2" action="{{ route('obat_store') }}" method="post">

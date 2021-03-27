@@ -1,5 +1,7 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('pegawai_show', $pegawai->id))
+
 @section('content')
 <div class="box pb-5 px-5 w-1/2 mx-auto">
     <div class="flex flex-col lg:flex-row border-b border-gray-200 dark:border-dark-5">

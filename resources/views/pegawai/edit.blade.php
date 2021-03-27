@@ -1,5 +1,7 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('pegawai_edit', $pegawai->id))
+
 @section('content')
 <div class="box p-5">
     <form class="grid grid-cols-12 gap-2" action="{{ route('pegawai_update', $pegawai->id) }}" method="post" enctype="multipart/form-data">

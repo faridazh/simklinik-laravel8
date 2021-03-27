@@ -1,5 +1,7 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('pasien_index'))
+
 @section('content')
 <div class="flex mb-5">
     <a href="{{ route('pasien_create') }}" class="btn btn-primary"><i class="fas fa-plus mr-2"></i> Pasien Baru</a>

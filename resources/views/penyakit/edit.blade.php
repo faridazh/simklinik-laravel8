@@ -1,5 +1,7 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('penyakit_edit', $disease->id))
+
 @section('content')
 <div class="box p-5">
     <form class="grid grid-cols-12 gap-2" action="{{ route('penyakit_update', $disease->id) }}" method="post">

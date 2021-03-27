@@ -4,6 +4,8 @@
 <script src="{{asset('assets/js/chart.min.js')}}" type="text/javascript"></script>
 @endsection
 
+@section('breadcrumb', Breadcrumbs::render('dashboard'))
+
 @section('content')
 <div class="grid grid-cols-12 gap-6">
     <div class="col-span-12 xxl:col-span-9">

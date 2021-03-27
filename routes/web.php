@@ -84,15 +84,6 @@ Route::group(['middleware' => ['auth']], function() {
 
     // Level: Staff //
     Route::group(['middleware' => ['ceklevel:staff']], function() {
-        Route::group(['as' => 'pasien'], function() {
-            Route::get('/pasien/edit/{pasien}', [PasienController::class, 'edit'])->name('_edit');
-            Route::patch('/pasien/update/{pasien}', [PasienController::class, 'update'])->name('_update');
-            Route::delete('/pasien/delete/{pasien}', [PasienController::class, 'destroy'])->name('_destroy');
-            # Method Error Handle
-            Route::get('/pasien/update/{pasien}', [PasienController::class, 'get_error']);
-            Route::get('/pasien/delete/{pasien}', [PasienController::class, 'get_error']);
-        });
-
         Route::group(['as' => 'dokter'], function() {
             Route::get('/dokter', [DokterController::class, 'index'])->name('_index');
             Route::get('/dokter/create', [DokterController::class, 'create'])->name('_create');
@@ -135,6 +126,12 @@ Route::group(['middleware' => ['auth']], function() {
             Route::get('/pasien/create', [PasienController::class, 'create'])->name('_create');
             Route::post('/pasien', [PasienController::class, 'store'])->name('_store');
             Route::get('/pasien/{pasien}', [PasienController::class, 'show'])->name('_show');
+            Route::get('/pasien/edit/{pasien}', [PasienController::class, 'edit'])->name('_edit');
+            Route::patch('/pasien/update/{pasien}', [PasienController::class, 'update'])->name('_update');
+            Route::delete('/pasien/delete/{pasien}', [PasienController::class, 'destroy'])->name('_destroy');
+            # Method Error Handle
+            Route::get('/pasien/update/{pasien}', [PasienController::class, 'get_error']);
+            Route::get('/pasien/delete/{pasien}', [PasienController::class, 'get_error']);
         });
 
         Route::group(['as' => 'registrasi'], function() {
@@ -148,21 +145,21 @@ Route::group(['middleware' => ['auth']], function() {
 
     // Level: Dokter //
     Route::group(['middleware' => ['ceklevel:dokter']], function() {
-        Route::group(['as' => ''], function() {
-            Route::get('/konsultasi/medicine', [ConsultationController::class, 'cariobat'])->name('konsultasi_cari_obat');
-            Route::get('/konsultasi/penyakit', [ConsultationController::class, 'caripenyakit'])->name('konsultasi_cari_penyakit');
-            Route::post('/konsultasi/update_antrian/{antrian}', [ConsultationController::class, 'update_antrian'])->name('konsultasi_update_antrian');
-            Route::get('/konsultasi/rekam', [ConsultationController::class, 'listrm'])->name('konsultasi_list');
-            Route::get('/konsultasi', [ConsultationController::class, 'index'])->name('konsultasi_index');
-            Route::get('/konsultasi/create', [ConsultationController::class, 'create'])->name('konsultasi_create');
-            Route::post('/konsultasi', [ConsultationController::class, 'store'])->name('konsultasi_store');
-            Route::get('/konsultasi/{konsultasi}', [ConsultationController::class, 'show'])->name('konsultasi_show');
-            Route::get('/konsultasi/resep/{resep}', [ConsultationController::class, 'resep'])->name('konsultasi_resep');
-            Route::post('/konsultasi/resep/store/{resep}', [ConsultationController::class, 'resep_store'])->name('konsultasi_resep_store');
-            Route::post('/konsultasi/resep/confirm/{resep}', [ConsultationController::class, 'resep_confirm'])->name('konsultasi_resep_confirm');
-            Route::patch('/konsultasi/resep/save', [ConsultationController::class, 'resep_save'])->name('konsultasi_resep_save');
-            Route::delete('/konsultasi/resep/delete', [ConsultationController::class, 'resep_delete'])->name('konsultasi_resep_delete');
-            Route::get('/konsultasi/resep/view/{konsultasi}', [ConsultationController::class, 'show_resep'])->name('konsultasi_show_resep');
+        Route::group(['as' => 'konsultasi'], function() {
+            Route::get('/konsultasi/medicine', [ConsultationController::class, 'cariobat'])->name('_cari_obat'); //AJAX
+            Route::get('/konsultasi/penyakit', [ConsultationController::class, 'caripenyakit'])->name('_cari_penyakit'); //AJAX
+            Route::post('/konsultasi/update_antrian/{antrian}', [ConsultationController::class, 'update_antrian'])->name('_update_antrian');
+            Route::get('/konsultasi/rekam', [ConsultationController::class, 'listrm'])->name('_list');
+            Route::get('/konsultasi', [ConsultationController::class, 'index'])->name('_index');
+            Route::get('/konsultasi/create', [ConsultationController::class, 'create'])->name('_create');
+            Route::post('/konsultasi', [ConsultationController::class, 'store'])->name('_store');
+            Route::get('/konsultasi/{konsultasi}', [ConsultationController::class, 'show'])->name('_show');
+            Route::get('/konsultasi/resep/{resep}', [ConsultationController::class, 'resep'])->name('_resep');
+            Route::post('/konsultasi/resep/store/{resep}', [ConsultationController::class, 'resep_store'])->name('_resep_store');
+            Route::post('/konsultasi/resep/confirm/{resep}', [ConsultationController::class, 'resep_confirm'])->name('_resep_confirm');
+            Route::patch('/konsultasi/resep/save', [ConsultationController::class, 'resep_save'])->name('_resep_save');
+            Route::delete('/konsultasi/resep/delete', [ConsultationController::class, 'resep_delete'])->name('_resep_delete');
+            Route::get('/konsultasi/resep/view/{konsultasi}', [ConsultationController::class, 'show_resep'])->name('_show_resep');
             # Method Error Handle
             Route::get('/konsultasi/update_antrian/{antrian}', [ConsultationController::class, 'get_error']);
             Route::get('/konsultasi/resep/store/{resep}', [ConsultationController::class, 'get_error']);

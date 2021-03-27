@@ -1,5 +1,7 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('obat_index'))
+
 @section('content')
 <div class="flex mb-5">
     <a href="{{ route('obat_create') }}" class="btn btn-primary"><i class="fas fa-plus mr-2"></i> Obat Baru</a>

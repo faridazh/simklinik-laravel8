@@ -1,7 +1,8 @@
 @extends('templates.main')
 
-@section('content')
+@section('breadcrumb', Breadcrumbs::render('myprofile'))
 
+@section('content')
 <div class="box pb-5 px-5 w-1/2 mx-auto">
     <div class="flex flex-col lg:flex-row border-b border-gray-200 dark:border-dark-5">
         <div class="flex flex-1 p-5 items-center justify-center lg:justify-start">

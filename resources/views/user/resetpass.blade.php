@@ -1,5 +1,7 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('reset_pass_myprofile'))
+
 @section('content')
 <div class="box p-5 w-1/2 mx-auto">
     <form class="grid grid-cols-12 gap-2" action="{{ route('myprofile_update_pass') }}" method="post">

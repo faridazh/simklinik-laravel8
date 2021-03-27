@@ -1,8 +1,10 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('penyakit_create'))
+
 @section('content')
 <div class="box p-5">
-    <form class="grid grid-cols-12 gap-2" action="{{route('penyakit_store', $id)}}" method="post">
+    <form class="grid grid-cols-12 gap-2" action="{{route('penyakit_store')}}" method="post">
         @csrf
         <div class="col-span-12">
             <div class="grid grid-cols-12 gap-2">

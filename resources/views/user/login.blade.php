@@ -1,5 +1,7 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('login'))
+
 @section('content')
 <div class="box p-5 ml-auto mr-auto w-2/5">
     <div class="text-center mb-10">

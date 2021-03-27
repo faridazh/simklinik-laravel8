@@ -1,5 +1,7 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('resep_show', $id))
+
 @section('content')
 <div class="box p-5">
     <table class="table">

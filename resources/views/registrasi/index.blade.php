@@ -1,5 +1,7 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('registrasi'))
+
 @section('content')
 <div class="ml-auto mr-auto mb-10 w-auto sm:w-64 lg:w-64">
     <div class="block items-center h-10">

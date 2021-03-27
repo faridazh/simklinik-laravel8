@@ -1,5 +1,7 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('penyakit_show', $disease->id))
+
 @section('content')
 <div class="box p-5">
     <div class="grid grid-cols-12 gap-2">
@@ -7,21 +9,21 @@
             <div class="grid grid-cols-12 gap-2">
                 <div class="col-span-12 lg:col-span-2 mb-3">
                     <label for="inputCode" class="form-label">Kode Penyakit</label>
-                    <input type="text" class="form-control" id="inputCode" value="{{old('code') ?? $disease->code}}">
+                    <input type="text" class="form-control" id="inputCode" value="{{old('code') ?? $disease->code}}" readonly>
                 </div>
             </div>
         </div>
         <div class="col-span-12 sm:col-span-6 mb-3">
             <label for="inputNamaIndo" class="form-label">Nama Indonesia</label>
-            <input type="text" class="form-control" id="inputNamaIndo" value="{{$disease->namaindo}}">
+            <input type="text" class="form-control" id="inputNamaIndo" value="{{$disease->namaindo}}" readonly>
         </div>
         <div class="col-span-12 sm:col-span-6 mb-3">
             <label for="inputNamaInggris" class="form-label">Nama Inggris</label>
-            <input type="text" class="form-control" id="inputNamaInggris" value="{{$disease->namainggris}}">
+            <input type="text" class="form-control" id="inputNamaInggris" value="{{$disease->namainggris}}" readonly>
         </div>
         <div class="col-span-12">
             <label for="inputKeterangan" class="form-label">Keterangan</label>
-            <textarea class="form-control" id="inputKeterangan" rows="3">{{$disease->keterangan}}</textarea>
+            <textarea class="form-control" id="inputKeterangan" rows="3" readonly>{{$disease->keterangan}}</textarea>
         </div>
         @staff
         <div class="col-span-12">

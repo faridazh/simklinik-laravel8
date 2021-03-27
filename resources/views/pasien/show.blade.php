@@ -1,5 +1,7 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('pasien_show', $pasien->id))
+
 @section('content')
 <div class="box p-5">
     <div class="grid grid-cols-12 gap-2">
@@ -284,15 +286,12 @@
         </div>
         <div class="col-span-12">
             <div class="flex mt-5 justify-end">
-                @staff
                 <a class="btn btn-warning" role="button" href="{{ route('pasien_edit', $pasien->id) }}"><i class="fas fa-edit mr-2"></i> Edit Data</a>
                 <a href="javascript:;" data-toggle="modal" data-target="#delete-modal" class="btn btn-danger ml-2"><i class="fas fa-trash-alt mr-2"></i> Hapus Data</a>
-                @endstaff
             </div>
         </div>
     </div>
 </div>
-@staff
 <div id="delete-modal" class="modal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -315,5 +314,4 @@
         </div>
     </div>
 </div>
-@endstaff
 @endsection

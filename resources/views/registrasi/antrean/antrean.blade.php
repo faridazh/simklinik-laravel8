@@ -1,5 +1,7 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('antrean_semua'))
+
 @section('content')
 <div class="grid grid-cols-12 gap-6 mt-5">
     <div class="col-span-12 sm:col-span-6 xl:col-span-4">

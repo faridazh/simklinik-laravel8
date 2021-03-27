@@ -1,5 +1,7 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('antrean_apotek'))
+
 @section('content')
 <div class="w-auto ml-auto mr-auto sm:w-3/4 lg:w-1/2">
     <div class="intro-y block sm:flex items-center h-10">

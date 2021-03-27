@@ -113,6 +113,7 @@ class ResepController extends Controller
             'resep_id' => $resep_id,
             'isi_resep' => $isi_resep,
             'reseps_count' => $reseps_count,
+            'id' => $id,
         ]);
     }
 

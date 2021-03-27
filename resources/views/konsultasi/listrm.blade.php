@@ -1,5 +1,7 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('konsultasi_list', $consultations[0]->norm))
+
 @section('content')
 <div class="box p-5">
     @foreach($consultations as $consultation)

@@ -24,7 +24,7 @@
             <div class="content">
                 <div class="top-bar mb-6">
                     <div class="breadcrumb mr-auto hidden sm:flex">
-                        Breadcumb
+                        @yield('breadcrumb')
                     </div>
                     @authcheck
                     <div class="intro-x dropdown w-8 h-8">

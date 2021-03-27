@@ -1,7 +1,9 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('antrean_dokter'))
+
 @section('content')
-<div class="w-1/4 ml-auto mr-auto">
+<div class="w-auto ml-auto mr-auto sm:w-3/4 lg:w-1/2">
     <div class="intro-y block sm:flex items-center h-10">
         <h2 class="text-4xl font-medium truncate">Dokter</h2>
     </div>

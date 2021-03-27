@@ -1,5 +1,7 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('konsultasi_show', $consultation->id))
+
 @section('content')
 <div class="box p-5">
     <div class="grid grid-cols-12 gap-2">

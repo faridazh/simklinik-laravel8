@@ -1,5 +1,7 @@
 @extends('templates.main')
 
+@section('breadcrumb', Breadcrumbs::render('penyakit_index'))
+
 @section('content')
 <div class="flex mb-5">
     @staff
