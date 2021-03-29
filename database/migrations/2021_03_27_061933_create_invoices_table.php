@@ -14,8 +14,9 @@ class CreateInvoicesTable extends Migration
             $table->char('invoice');
             $table->char('code', 6);
             $table->integer('total');
-            $table->enum('payment_method', ['Tunai','Transfer Bank','Kartu Kredit','Dana','OVO','GoPay',])->nullable();
-            $table->enum('status', ['Lunas','Hutang','Belum Bayar']);
+            $table->enum('jenis', ['Income','Expense'])->default('Income');
+            $table->enum('payment_method', ['Tunai','Transfer Bank','Kredit/Debit','Dana','OVO','GoPay','Hutang'])->nullable();
+            $table->enum('status', ['Lunas','Belum Bayar']);
 
             $table->timestamps();
             $table->softDeletes();

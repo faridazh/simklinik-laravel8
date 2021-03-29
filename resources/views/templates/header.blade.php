@@ -22,7 +22,7 @@
         <div class="flex">
             @include('templates.navbar')
             <div class="content">
-                <div class="top-bar mb-6">
+                <div class="top-bar mb-6 noPrint">
                     <div class="breadcrumb mr-auto hidden sm:flex">
                         @yield('breadcrumb')
                     </div>
@@ -54,7 +54,7 @@
                     <a class="btn btn-outline-primary" data-toggle="modal" data-target="#login-modal"><i class="far fa-sign-in-alt mr-2"></i> Login</a>
                     @endauthcheck
                 </div>
-                @if(!Request::routeIs('dashboard','login'))
+                @if(!Request::routeIs('dashboard','login','home','invoice_show'))
                 <div class="mb-6">
                     <div class="text-3xl font-bold mr-auto">{!! $pagetitle !!}</div>
                     <div class="text-lg font-medium mr-auto">{!! $pagedesc !!}</div>

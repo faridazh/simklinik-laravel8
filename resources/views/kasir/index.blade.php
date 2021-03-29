@@ -3,7 +3,37 @@
 @section('breadcrumb', Breadcrumbs::render('invoice_index'))
 
 @section('content')
-<div class="flex mb-5">
+<div class="flex mb-5 items-center">
+    <a href="{{ route('invoice_create') }}" class="btn btn-primary"><i class="fas fa-plus mr-2"></i> Invoice Baru</a>
+</div>
+<div class="box p-5 overflow-x-auto">
+    <table class="table">
+        <thead>
+            <tr class="border-b-2 dark:border-dark-5 whitespace-nowrap text-center">
+                <th width="25%">Invoice</th>
+                <th width="20%">Code</th>
+                <th width="25%">Total</th>
+                <th width="20%">Status</th>
+                <th width="10%">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($belumBayar as $data)
+            <tr class="border-b dark:border-dark-5 whitespace-nowrap text-center">
+                <td class="font-medium">{{ $data->invoice }}</td>
+                <td>{{ $data->code }}</td>
+                <td>{{ config('setting.currency') . number_format($data->total) }}</td>
+                <td>{{ $data->status }}</td>
+                <td>
+                    <a href="{{ route('invoice_pay', $data->id) }}" class="btn btn-primary btn-sm tooltip" title="Bayar"><i class="fal fa-cash-register fa-fw"></i></a>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+<div class="flex mb-5 mt-20 items-center">
+    <div class="font-medium text-xl">Sudah Bayar</div>
     <form action="{{ route('invoice_index') }}" method="get" class="flex ml-auto search hidden sm:block">
         <input class="search__input form-control border-transparent placeholder-theme-13" type="search" name="cari" placeholder="Masukan keyword...">
         <i class="far fa-search feather feather-search search__icon dark:text-gray-300 text-lg"></i>
@@ -27,7 +57,7 @@
             <tr class="border-b-2 dark:border-dark-5 whitespace-nowrap text-center">
                 <th width="20%">Invoice</th>
                 <th width="15%">Code</th>
-                <th width="15%">Payment Method</th>
+                <th width="15%">Pembayaran</th>
                 <th width="20%">Total</th>
                 <th width="15%">Status</th>
                 <th width="15%">Aksi</th>
@@ -39,11 +69,10 @@
                 <td class="font-medium">{{ $invoice->invoice }}</td>
                 <td>{{ $invoice->code }}</td>
                 <td>{{ $invoice->payment_code }}</td>
-                <td>{{ config('setting.currency') . ' ' . number_format($invoice->total) }}</td>
+                <td>{{ config('setting.currency') . number_format($invoice->total) }}</td>
                 <td>{{ $invoice->status }}</td>
                 <td>
-                    <a href="{{ route('invoice_edit', $pasien->id) }}" class="btn btn-warning btn-sm tooltip" title="Edit"><i class="fas fa-pen fa-fw"></i></a>
-                    <a href="{{ route('invoice_show', $pasien->id) }}" class="btn btn-primary btn-sm tooltip" title="Detail"><i class="fas fa-info fa-fw"></i></a>
+                    <a href="{{ route('invoice_show', $invoice->id) }}" class="btn btn-primary btn-sm tooltip" title="Invoice"><i class="fal fa-receipt fa-fw"></i></a>
                 </td>
             </tr>
             @endforeach

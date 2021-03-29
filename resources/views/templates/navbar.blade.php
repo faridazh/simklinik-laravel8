@@ -1,4 +1,4 @@
-<nav class="side-nav">
+<nav class="side-nav @if(Request::routeIs('invoice_show')) noPrint @endif">
     <a href="{{route('dashboard')}}" class="flex items-center pl-5 pt-4">
         <img class="w-6" src="{{ asset('uploads/images'.'/'.config('setting.weblogo')) }}" onerror="this.src='{{asset('assets/images/logo.png')}}';">
         <span class="hidden xl:block text-white text-lg ml-3 font-medium">{{ config('setting.webname') }}</span>

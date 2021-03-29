@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Consultation;
 use App\Models\Invoice;
+use App\Models\Pasien;
 use App\Models\Transaction;
 
 use Illuminate\Http\Request;
@@ -30,17 +32,17 @@ class InvoiceController extends Controller
 
         if ($request->has('cari'))
         {
-            $invoices = Invoice::where('invoice','LIKE','%'.$request->cari.'%')
+            $invoices = Invoice::where('status', 'Lunas')
+                                ->where('invoice','LIKE','%'.$request->cari.'%')
                                 ->orwhere('code','LIKE','%'.$request->cari.'%')
                                 ->orwhere('total','LIKE','%'.$request->cari.'%')
                                 ->orwhere('payment_method','LIKE','%'.$request->cari.'%')
                                 ->orwhere('status','LIKE','%'.$request->cari.'%')
-                            ->orderBy($sortby, $orderby)
-                            ->paginate($page);
+                            ->orderBy($sortby, $orderby)->paginate($page);
         }
         else
         {
-            $invoices = Invoice::orderBy($sortby, $orderby)->paginate($page);
+            $invoices = Invoice::where('status', 'Lunas')->orderBy($sortby, $orderby)->paginate($page);
         }
 
         return view('kasir.index', [
@@ -48,60 +50,107 @@ class InvoiceController extends Controller
             'pagedesc' => 'Menampilkan seluruh data invoice',
             'pageid' => 'datainvoice',
             'invoices' => $invoices,
+            'belumBayar' => Invoice::where('status', 'Belum Bayar')->orderBy('invoice', 'asc')->get(),
         ]);
     }
 
     public function create()
     {
-        //
+        return view('kasir.create', [
+            'pagetitle' => 'Invoice Baru',
+            'pagedesc' => 'Membuar invoice baru',
+            'pageid' => 'datainvoice',
+        ]);
     }
 
     public function store(Request $request)
     {
-        //
+        $request->validate([
+
+        ]);
+
+        Alert::toast('Pembayaran berhasil!', 'success');
+        return redirect()->route('invoice_show', $invoice->id);
     }
 
     public function show(Invoice $invoice)
     {
+        if ($invoice->status != 'Lunas') {
+            Alert::toast('Resi belum terbayar!', 'error');
+            return redirect()->route('invoice_pay', $invoice->id);
+        }
+
+        $client = Consultation::where('code', $invoice->code)->select('norm')->first();
+
         return view('kasir.show', [
-            'pagetitle' => '',
-            'pagedesc' => '',
+            'pagetitle' => 'Invoice',
+            'pagedesc' => null,
             'pageid' => 'datainvoice',
             'invoice' => $invoice,
+            'client' => Pasien::where('norm', $client->norm)->first(),
+            'transaction' => Transaction::where('invoice', $invoice->invoice)->get(),
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function pay(Invoice $invoice)
     {
-        //
+        if ($invoice->status == 'Lunas') {
+            Alert::toast('Resi sudah terbayar!', 'error');
+            return redirect()->route('invoice_show', $invoice->id);
+        }
+
+        $client = Consultation::where('code', $invoice->code)->select('norm')->first();
+
+        return view('kasir.bayar', [
+            'pagetitle' => 'Invoice',
+            'pagedesc' => null,
+            'pageid' => 'datainvoice',
+            'invoice' => $invoice,
+            'client' => Pasien::where('norm', $client->norm)->first(),
+            'transaction' => Transaction::where('invoice', $invoice->invoice)->get(),
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function pay_process(Request $request, Invoice $invoice)
     {
-        //
+        $request->validate([
+            'payment_method' => 'required|in:Tunai,Transfer Bank,Kredit/Debit,Dana,OVO,GoPay,Hutang',
+        ]);
+
+        if ($request->payment_method == 'Hutang') {
+            $status_pay = 'Belum Bayar';
+        }
+        else {
+            $status_pay = 'Lunas';
+        }
+
+        Invoice::where('invoice', $invoice->invoice)->update([
+            'payment_method' => $request->payment_method,
+            'status' => $status_pay,
+        ]);
+
+        Alert::toast('Pembayaran berhasil!', 'success');
+        return redirect()->route('invoice_show', $invoice->id);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    // public function edit($id)
+    // {
+    //     //
+    // }
+    //
+    // public function update(Request $request, $id)
+    // {
+    //     //
+    // }
+    //
+    // public function destroy($id)
+    // {
+    //     //
+    // }
+
+    public function get_error()
     {
-        //
+        Alert::toast('Error, silahkan periksa kembali!', 'error');
+        return redirect()->route('invoice_index');
     }
 }
