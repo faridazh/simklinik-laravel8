@@ -41,6 +41,18 @@ Breadcrumbs::for('invoice_index', function ($trail) {
     $trail->parent('dashboard');
     $trail->push('Invoice', route('invoice_index'));
 });
+Breadcrumbs::for('invoice_create', function ($trail) {
+    $trail->parent('invoice_index');
+    $trail->push('Baru', route('invoice_create'));
+});
+Breadcrumbs::for('invoice_show', function ($trail, $id) {
+    $trail->parent('invoice_index');
+    $trail->push('Detail', route('invoice_show', $id));
+});
+Breadcrumbs::for('invoice_pay', function ($trail, $id) {
+    $trail->parent('invoice_index');
+    $trail->push('Bayar', route('invoice_pay', $id));
+});
 
 // Konsultasi
 Breadcrumbs::for('konsultasi_index', function ($trail) {

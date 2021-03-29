@@ -1,25 +1,9 @@
 @extends('templates.main')
 
-@section('breadcrumb', Breadcrumbs::render('invoice_show', $invoice->id))
+@section('breadcrumb', Breadcrumbs::render('invoice_pay', $invoice->id))
 
 @section('content')
-<div class="intro-y flex flex-col sm:flex-row items-center mt-8 noPrint">
-    <div class="ml-auto w-full sm:w-auto flex mt-4 sm:mt-0">
-        <button class="btn btn-primary shadow-md mr-2" onclick="window.print();"><i class="fas fa-print mr-2"></i> Print</button>
-    </div>
-</div>
-<div class="intro-y box overflow-hidden mt-5">
-    <div class="flex pt-10 px-5 sm:px-20 sm:pt-20 lg:pb-20 items-start">
-        <div>
-            <div class="font-semibold text-theme-1 dark:text-theme-10 text-3xl">INVOICE</div>
-            <div class="font-semibold @if($invoice->status == 'Lunas') text-theme-9 @else text-theme-6 @endif text-xl">{{ Str::upper($invoice->status) }}</div>
-        </div>
-        <div class="ml-auto text-right">
-            <div class="text-xl text-theme-1 dark:text-theme-10 font-medium">{{ config('setting.webname') }}</div>
-            <div class="mt-1">left4code@gmail.com</div>
-            <div class="mt-1">8023 Amerige Street Harriman, NY 10926.</div>
-        </div>
-    </div>
+<div class="intro-y box mt-5">
     <div class="flex border-b px-5 sm:px-20 pt-10 pb-10 sm:pb-20 items-start">
         <div>
             <div class="text-base text-gray-600">Pasien</div>
@@ -52,7 +36,7 @@
                             <div class="text-gray-600 text-xs whitespace-nowrap">Regular License</div>
                         </td>
                         <td class="text-right border-b dark:border-dark-5 w-32">{{ number_format($transaction[$i]->quantity) }}</td>
-                        <td class="text-right border-b dark:border-dark-5 w-32">{{ config('setting.currency') . ' ' . number_format($transaction[$i]->harga) }}</td>
+                        <td class="text-right border-b dark:border-dark-5 w-32">{{ config('setting.currency') . number_format($transaction[$i]->harga) }}</td>
                         <td class="text-right border-b dark:border-dark-5 w-32 font-medium">{{ config('setting.currency') . ' ' . number_format($transaction[$i]->total) }}</td>
                     </tr>
                     @endfor
@@ -60,14 +44,25 @@
             </table>
         </div>
     </div>
-    <div class="px-5 sm:px-20 pb-10 sm:pb-20 flex flex-col-reverse sm:flex-row">
-        <div class="text-center sm:text-left mt-10 sm:mt-0">
-            <div class="text-base text-gray-600">{{ $invoice->payment_method }}</div>
-        </div>
-        <div class="text-center sm:text-right sm:ml-auto">
+    <div class="px-5 sm:px-20 pb-10 sm:pb-20 flex flex-col sm:flex-row">
+        <div class="text-center sm:text-left">
             <div class="text-base text-gray-600">Total Bayar</div>
-            <div class="text-xl text-theme-1 dark:text-theme-10 font-medium mt-2">{{ config('setting.currency') . ' ' . number_format($invoice->total) }}</div>
+            <div class="text-xl text-theme-1 dark:text-theme-10 font-medium mt-2">{{ config('setting.currency') . number_format($invoice->total) }}</div>
         </div>
+        <form class="text-center sm:text-right sm:ml-auto mt-10 sm:mt-0 flex justify-end items-end w-full sm:w-72" action="{{ route('invoice_pay_process', $invoice->id) }}" method="post">
+            @csrf
+            @method('patch')
+            <select id="inputMethod" class="tail-select z-50" name="payment_method">
+                <option value="Tunai">Tunai</option>
+                <option value="Kredit/Debit">Kredit/Debit</option>
+                <option value="Transfer Bank">Transfer Bank</option>
+                <option value="Dana">Dana</option>
+                <option value="OVO">OVO</option>
+                <option value="GoPay">GoPay</option>
+                <option value="Hutang">Hutang</option>
+            </select>
+            <button type="submit" class="btn btn-primary ml-2"><i class="far fa-cash-register mr-2"></i> Bayar</button>
+        </form>
     </div>
 </div>
 @endsection

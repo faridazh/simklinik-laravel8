@@ -22,7 +22,7 @@
             <input type="text" class="form-control" id="inputCariObat" list="ObatList" name="namaobat" autocomplete="off">
             <datalist id="ObatList"></datalist>
         </div>
-        <button type="submit" class="btn btn-primary ml-3">Tambah</button>
+        <button type="submit" class="btn btn-primary ml-3"><i class="fas fa-plus mr-2"></i> Tambah</button>
     </form>
 </div>
 

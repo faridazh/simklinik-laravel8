@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
+use App\Models\Consultation;
 use App\Models\Dokter;
+use App\Models\Invoice;
 use App\Models\Medicine;
 use App\Models\Pasien;
 
@@ -43,7 +45,7 @@ class PageController extends Controller
             $end = date('Y-m-d 23:59:59', strtotime('last day of this month', time()));
         }
 
-        return Pasien::whereBetween('created_at', [$start, $end])->count();
+        return [$start, $end];
     }
 
     private function pasien_age()
@@ -51,12 +53,7 @@ class PageController extends Controller
         $lahir = Pasien::select('datelahir')->get();
         $count1 = $count2 = $count3 = $count4 = 0;
 
-        // return $lahir->count();
-
-        if ($lahir->count() == 0) {
-            $final = [$count1, $count2, $count3, $count4];
-        }
-        else {
+        if ($lahir->count() != 0) {
             for ($i=0; $i < $lahir->count(); $i++) {
                 $array[] = intval(date('Y', time() - strtotime($lahir[$i]->datelahir))) - 1970;
             }
@@ -75,10 +72,9 @@ class PageController extends Controller
                    $count4++;
                }
            }
-
-           $final = [$count1, $count2, $count3, $count4];
         }
-        return $final;
+
+        return [$count1, $count2, $count3, $count4];
     }
 
     private function gender_pasien()
@@ -86,9 +82,59 @@ class PageController extends Controller
         $pria = Pasien::where('kelamin', 'Laki-laki')->count();
         $wanita = Pasien::where('kelamin', 'Perempuan')->count();
 
-        $array = [$pria, $wanita];
+        return [$pria, $wanita];
+    }
 
-        return $array;
+    private function incomeGraph()
+    {
+        $start = date('Y-m-d 00:00:00', strtotime('-1 year', time()));
+        $end = date('Y-m-d 23:59:59', strtotime('today', time()));
+
+        $query = Invoice::where('jenis', 'Income')->where('status', 'Lunas');
+
+        $Jan = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of January this year', time())), date('Y-m-d 23:59:59', strtotime('last day of January this year', time()))])->sum('total');
+        $Feb = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of February this year', time())), date('Y-m-d 23:59:59', strtotime('last day of February this year', time()))])->sum('total');
+        $Mar = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of March this year', time())), date('Y-m-d 23:59:59', strtotime('last day of March this year', time()))])->sum('total');
+        $Apr = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of April this year', time())), date('Y-m-d 23:59:59', strtotime('last day of April this year', time()))])->sum('total');
+        $May = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of May this year', time())), date('Y-m-d 23:59:59', strtotime('last day of May this year', time()))])->sum('total');
+        $Jun = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of June this year', time())), date('Y-m-d 23:59:59', strtotime('last day of June this year', time()))])->sum('total');
+        $Jul = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of July this year', time())), date('Y-m-d 23:59:59', strtotime('last day of July this year', time()))])->sum('total');
+        $Aug = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of August this year', time())), date('Y-m-d 23:59:59', strtotime('last day of August this year', time()))])->sum('total');
+        $Sep = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of September this year', time())), date('Y-m-d 23:59:59', strtotime('last day of September this year', time()))])->sum('total');
+        $Oct = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of October this year', time())), date('Y-m-d 23:59:59', strtotime('last day of October this year', time()))])->sum('total');
+        $Nov = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of November this year', time())), date('Y-m-d 23:59:59', strtotime('last day of November this year', time()))])->sum('total');
+        $Dec = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of December this year', time())), date('Y-m-d 23:59:59', strtotime('last day of December this year', time()))])->sum('total');
+
+        $now = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of this month', time())), date('Y-m-d 23:59:59', strtotime('last day of this month', time()))])->sum('total');
+        $last = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of last month', time())), date('Y-m-d 23:59:59', strtotime('last day of last month', time()))])->sum('total');
+
+        return ['Jan' => $Jan, 'Feb' => $Feb, 'Mar' => $Mar, 'Apr' => $Apr, 'May' => $May, 'Jun' => $Jun, 'Jul' => $Jul, 'Aug' => $Aug, 'Sep' => $Sep, 'Oct' => $Oct, 'Nov' => $Nov, 'Dec' => $Dec, 'now' => $now, 'last' => $last];
+    }
+
+    private function expenseGraph()
+    {
+        $start = date('Y-m-d 00:00:00', strtotime('-1 year', time()));
+        $end = date('Y-m-d 23:59:59', strtotime('today', time()));
+
+        $query = Invoice::where('jenis', 'Expense')->where('status', 'Lunas');
+
+        $Jan = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of January this year', time())), date('Y-m-d 23:59:59', strtotime('last day of January this year', time()))])->sum('total');
+        $Feb = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of February this year', time())), date('Y-m-d 23:59:59', strtotime('last day of February this year', time()))])->sum('total');
+        $Mar = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of March this year', time())), date('Y-m-d 23:59:59', strtotime('last day of March this year', time()))])->sum('total');
+        $Apr = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of April this year', time())), date('Y-m-d 23:59:59', strtotime('last day of April this year', time()))])->sum('total');
+        $May = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of May this year', time())), date('Y-m-d 23:59:59', strtotime('last day of May this year', time()))])->sum('total');
+        $Jun = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of June this year', time())), date('Y-m-d 23:59:59', strtotime('last day of June this year', time()))])->sum('total');
+        $Jul = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of July this year', time())), date('Y-m-d 23:59:59', strtotime('last day of July this year', time()))])->sum('total');
+        $Aug = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of August this year', time())), date('Y-m-d 23:59:59', strtotime('last day of August this year', time()))])->sum('total');
+        $Sep = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of September this year', time())), date('Y-m-d 23:59:59', strtotime('last day of September this year', time()))])->sum('total');
+        $Oct = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of October this year', time())), date('Y-m-d 23:59:59', strtotime('last day of October this year', time()))])->sum('total');
+        $Nov = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of November this year', time())), date('Y-m-d 23:59:59', strtotime('last day of November this year', time()))])->sum('total');
+        $Dec = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of December this year', time())), date('Y-m-d 23:59:59', strtotime('last day of December this year', time()))])->sum('total');
+
+        $now = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of this month', time())), date('Y-m-d 23:59:59', strtotime('last day of this month', time()))])->sum('total');
+        $last = $query->whereBetween('updated_at', [date('Y-m-d 00:00:00', strtotime('first day of last month', time())), date('Y-m-d 23:59:59', strtotime('last day of last month', time()))])->sum('total');
+
+        return ['Jan' => $Jan,  'Feb' => $Feb, 'Mar' => $Mar, 'Apr' => $Apr, 'May' => $May, 'Jun' => $Jun, 'Jul' => $Jul, 'Aug' => $Aug, 'Sep' => $Sep, 'Oct' => $Oct, 'Nov' => $Nov, 'Dec' => $Dec, 'now' => $now, 'last' => $last];
     }
 
     public function dashboard(Request $request)
@@ -103,23 +149,31 @@ class PageController extends Controller
             $data_general = null;
         }
 
-        $new_pasien_count = $this->general_time($data_general);
+        if (!Cache::has('incomeList')) {
+            Cache::put('incomeList', $this->incomeGraph(), 3600);
+        }
 
-        $dokterPhoto = Dokter::where('namagelar', config('setting.dokterjaga'))->select('photo')->first();
-
-        $obats = Medicine::where('stok', '<=', 5)->select('namaobat','isiobat','stok','jenis')->orderBy('updated_at', 'desc')->limit(5)->get();
+        if (!Cache::has('expenseList')) {
+            Cache::put('expenseList', $this->expenseGraph(), 3600);
+        }
 
         return view('dashboard', [
             'pagetitle' => 'Dashboard',
             'pagedesc' => 'Halaman utama',
             'pageid' => 'dashboard',
             'request' => $request,
+            'income' => Invoice::where('jenis', 'Income')->where('status', 'Lunas')->whereBetween('created_at', $this->general_time($data_general))->sum('total'),
+            'expense' => Invoice::where('jenis', 'Expense')->where('status', 'Lunas')->whereBetween('created_at', $this->general_time($data_general))->sum('total'),
             'all_pasien_count' => Pasien::count(),
-            'new_pasien_count' => $new_pasien_count,
+            'new_pasien_count' => Pasien::whereBetween('created_at', $this->general_time($data_general))->count(),
             'age_pasien' => $this->pasien_age(),
             'gender_pasien' => $this->gender_pasien(),
-            'photo_dokter' => $dokterPhoto,
-            'obats' => $obats,
+            'photo_dokter' => Dokter::where('namagelar', config('setting.dokterjaga'))->select('photo')->first(),
+            'obats' => Medicine::where('stok', '<=', 5)->select('namaobat','isiobat','stok','jenis')->orderBy('updated_at', 'desc')->limit(5)->get(),
+            'pemasukan' => Invoice::where('jenis', 'Income')->where('status', 'Lunas')->orderBy('invoice', 'desc')->join('consultations', 'invoices.code', '=', 'consultations.code')->select('invoices.*', 'consultations.nama')->limit(5)->get(),
+            'pengeluaran' => Invoice::where('jenis', 'Expense')->where('status', 'Lunas')->orderBy('invoice', 'desc')->join('consultations', 'invoices.code', '=', 'consultations.code')->select('invoices.*', 'consultations.nama')->limit(5)->get(),
+            'incomeList' => Cache::get('incomeList'),
+            'expenseList' => Cache::get('expenseList'),
         ]);
     }
 

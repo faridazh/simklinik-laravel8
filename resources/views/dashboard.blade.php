@@ -40,7 +40,7 @@
                                     <i class="far fa-money-bill-wave text-3xl" style="color:#32CD32"></i>
                                     <div class="ml-auto"></div>
                                 </div>
-                                <div class="text-3xl font-bold leading-8 mt-6">N/A</div>
+                                <div class="text-3xl font-bold leading-8 mt-6">{{ config('setting.currency') . number_format($income) }}</div>
                                 <div class="text-base text-gray-600 mt-1">Pemasukan</div>
                             </div>
                         </div>
@@ -52,7 +52,7 @@
                                     <i class="far fa-coins text-3xl" style="color:#FA8072"></i>
                                     <div class="ml-auto"></div>
                                 </div>
-                                <div class="text-3xl font-bold leading-8 mt-6">N/A</div>
+                                <div class="text-3xl font-bold leading-8 mt-6">{{ config('setting.currency') . number_format($expense) }}</div>
                                 <div class="text-base text-gray-600 mt-1">Pengeluaran</div>
                             </div>
                         </div>
@@ -87,35 +87,19 @@
             <!-- START INCOME-EXPENSE -->
             <div class="col-span-12 lg:col-span-6 mt-8">
                 <div class="intro-y block sm:flex items-center h-10">
-                    <h2 class="text-lg font-medium truncate mr-5">Sales Report</h2>
-                    <div class="sm:ml-auto mt-3 sm:mt-0 relative text-gray-700 dark:text-gray-300">
-                        <form class="flex" action="#" method="get">
-                            <div class="input-group">
-                                <div class="input-group-text">
-                                    <i class="far fa-calendar-alt text-xl"></i>
-                                </div>
-                                <select class="form-select" name="" onchange='this.form.submit()'>
-                                    <option value="Harian">Harian</option>
-                                    <option value="Mingguan">Mingguan</option>
-                                    <option value="Bulanan">Bulanan</option>
-                                    <option value="Tahunan">Tahunan</option>
-                                    <option value="Semua">Semua</option>
-                                </select>
-                            </div>
-                        </form>
-                    </div>
+                    <h2 class="text-lg font-medium truncate mr-5">Keuangan</h2>
                 </div>
                 <div class="intro-y box p-5 mt-12 sm:mt-5">
                     <div class="flex flex-col xl:flex-row xl:items-center">
                         <div class="flex">
                             <div>
-                                <div class="text-theme-19 dark:text-gray-300 text-lg xl:text-xl font-bold">$15,000</div>
-                                <div class="mt-0.5 text-gray-600 dark:text-gray-600">This Month</div>
+                                <div class="text-theme-19 dark:text-gray-300 text-lg xl:text-xl font-bold">{{ config('setting.currency') . number_format($incomeList['now'] - $expenseList['now']) }}</div>
+                                <div class="mt-0.5 text-gray-600 dark:text-gray-600">Bulan Ini</div>
                             </div>
                             <div class="w-px h-12 border border-r border-dashed border-gray-300 dark:border-dark-5 mx-4 xl:mx-6"></div>
                             <div>
-                                <div class="text-gray-600 dark:text-gray-600 text-lg xl:text-xl font-medium">$10,000</div>
-                                <div class="mt-0.5 text-gray-600 dark:text-gray-600">Last Month</div>
+                                <div class="text-gray-600 dark:text-gray-600 text-lg xl:text-xl font-medium">{{ config('setting.currency') . number_format($incomeList['last'] - $expenseList['last']) }}</div>
+                                <div class="mt-0.5 text-gray-600 dark:text-gray-600">Bulan Lalu</div>
                             </div>
                         </div>
                     </div>
@@ -241,33 +225,34 @@
                             </div>
                         </div>
                         @endforeach
-                        <a href="{{route('obat_stok')}}" class="intro-x w-full block text-center rounded-md py-3 border border-dotted border-theme-15 dark:border-dark-5 text-theme-16 dark:text-gray-600">Lainnya</a>
+                        <a href="{{route('obat_stok')}}" class="intro-x w-full block text-center rounded-md py-3 border border-dotted border-theme-15 dark:border-dark-5 text-theme-16 dark:text-gray-600">Lihat Lainnya</a>
                     </div>
                 </div>
                 <!-- END STOK OBAT -->
                 @endif
-                <!-- START TRAKSAKSI -->
+                @if($pemasukan->count() != 0)
+                <!-- START INCOME -->
                 <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mt-3">
                     <div class="intro-x flex items-center h-10">
-                        <h2 class="text-lg font-medium truncate mr-5">Transaksi</h2>
+                        <h2 class="text-lg font-medium truncate mr-5">Pemasukan</h2>
                     </div>
                     <div class="mt-5">
+                        @foreach($pemasukan as $invoice)
                         <div class="intro-x">
                             <div class="box px-5 py-3 mb-3 flex items-center zoom-in">
-                                <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
-                                    <img alt="Midone Tailwind HTML Admin Template" src="dist/images/profile-15.jpg">
-                                </div>
                                 <div class="ml-4 mr-auto">
-                                    <div class="font-medium">Kevin Spacey</div>
-                                    <div class="text-gray-600 text-xs mt-0.5">2 April 2022</div>
+                                    <div class="font-medium">{{ $invoice->nama }}</div>
+                                    <div class="text-gray-600 text-xs mt-0.5">{{ date('j M, Y', strtotime($invoice->updated_at)) }}</div>
                                 </div>
-                                <div class="text-theme-9">+$128</div>
+                                <div class="text-theme-9">{{ config('setting.currency') . number_format($invoice->total) }}</div>
                             </div>
                         </div>
-                        <a href="javascript;" class="intro-x w-full block text-center rounded-md py-3 border border-dotted border-theme-15 dark:border-dark-5 text-theme-16 dark:text-gray-600">Lainnya</a>
+                        @endforeach
+                        <a href="{{ route('invoice_index') }}" class="intro-x w-full block text-center rounded-md py-3 border border-dotted border-theme-15 dark:border-dark-5 text-theme-16 dark:text-gray-600">Lihat Lainnya</a>
                     </div>
                 </div>
-                <!-- END TRANSAKSI -->
+                <!-- END INCOME -->
+                @endif
             </div>
         </div>
     </div>
@@ -282,7 +267,20 @@
             datasets: [
                 {
                     label: "Pemasukan",
-                    data: [200000,250000,200000,500000,400500,850000,1050000,1250000,1100000,900000,1200000,1500000],
+                    data: [
+                        {{$incomeList['Jan']}},
+                        {{$incomeList['Feb']}},
+                        {{$incomeList['Mar']}},
+                        {{$incomeList['Apr']}},
+                        {{$incomeList['May']}},
+                        {{$incomeList['Jun']}},
+                        {{$incomeList['Jul']}},
+                        {{$incomeList['Aug']}},
+                        {{$incomeList['Sep']}},
+                        {{$incomeList['Oct']}},
+                        {{$incomeList['Nov']}},
+                        {{$incomeList['Dec']}},
+                    ],
                     borderWidth: 4,
                     borderColor: "#32CD32",
                     backgroundColor: "transparent",
@@ -291,7 +289,20 @@
                 },
                 {
                     label: "Pengeluaran",
-                    data: [300000,400000,500000,450000,690000,705000,500000,450000,200000,250000,200000],
+                    data: [
+                        {{$incomeList['Jan']}},
+                        {{$incomeList['Feb']}},
+                        {{$incomeList['Mar']}},
+                        {{$incomeList['Apr']}},
+                        {{$incomeList['May']}},
+                        {{$incomeList['Jun']}},
+                        {{$incomeList['Jul']}},
+                        {{$incomeList['Aug']}},
+                        {{$incomeList['Sep']}},
+                        {{$incomeList['Oct']}},
+                        {{$incomeList['Nov']}},
+                        {{$incomeList['Dec']}},
+                    ],
                     borderWidth: 4,
                     // borderDash: [2, 2],
                     borderColor: "#FA8072",

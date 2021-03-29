@@ -1,9 +1,9 @@
-<div class="mobile-menu md:hidden">
+<div class="mobile-menu md:hidden @if(Request::routeIs('invoice_show')) noPrint @endif">
     <div class="mobile-menu-bar">
-        <a href="" class="flex mr-auto">
-            <img alt="Midone Tailwind HTML Admin Template" class="w-6" src="{{ asset('uploads/images'.'/'.config('setting.weblogo')) }}" onerror="this.src='{{asset('assets/images/logo.png')}}';">
+        <a href="{{route('dashboard')}}" class="flex mr-auto">
+            <img class="w-6" src="{{ asset('uploads/images'.'/'.config('setting.weblogo')) }}" onerror="this.src='{{asset('assets/images/logo.png')}}';">
         </a>
-        <a href="javascript:;" id="mobile-menu-toggler"><i data-feather="bar-chart-2" class="w-8 h-8 text-white transform -rotate-90"></i></a>
+        <a href="javascript:;" id="mobile-menu-toggler"><i class="fal fa-bars text-2xl text-white"></i></a>
     </div>
     <ul class="border-t border-theme-29 py-5 hidden">
         @authcheck
