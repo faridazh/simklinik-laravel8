@@ -138,7 +138,7 @@ class PageController extends Controller
     }
 
     public function dashboard(Request $request)
-    {
+    {s
         if ($request->has('general')) {
             $request->validate([
                 'general' => 'required|in:Harian,Mingguan,Bulanan,Tahunan,Semua',
