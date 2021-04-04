@@ -102,7 +102,7 @@
         @endstaff
         @kasir
         <li>
-            <a href="{{route('invoice_index')}}" class="side-menu side-menu{{Request::routeIs('invoice_index','invoice_show') ? '--active' : ''}}">
+            <a href="{{route('invoice_index')}}" class="side-menu side-menu{{Request::routeIs('invoice_index','invoice_show','invoice_pay') ? '--active' : ''}}">
                 <div class="side-menu__icon"><i class="fal fa-cash-register fa-fw text-2xl"></i></div>
                 <div class="side-menu__title">Kasir</div>
             </a>

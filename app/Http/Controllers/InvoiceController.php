@@ -50,7 +50,8 @@ class InvoiceController extends Controller
             'pagedesc' => 'Menampilkan seluruh data invoice',
             'pageid' => 'datainvoice',
             'invoices' => $invoices,
-            'belumBayar' => Invoice::where('status', 'Belum Bayar')->orderBy('invoice', 'asc')->get(),
+            'belumBayar' => Invoice::where('status', 'Belum Bayar')->where('payment_method', '!=', 'Hutang')->orderBy('invoice', 'asc')->get(),
+            'Hutang' => Invoice::where('status', 'Belum Bayar')->where('payment_method', '=', 'Hutang')->orderBy('invoice', 'asc')->get(),
         ]);
     }
 
@@ -58,7 +59,7 @@ class InvoiceController extends Controller
     {
         return view('kasir.create', [
             'pagetitle' => 'Invoice Baru',
-            'pagedesc' => 'Membuar invoice baru',
+            'pagedesc' => 'Membuat invoice baru',
             'pageid' => 'datainvoice',
         ]);
     }
@@ -129,8 +130,28 @@ class InvoiceController extends Controller
             'status' => $status_pay,
         ]);
 
-        Alert::toast('Pembayaran berhasil!', 'success');
-        return redirect()->route('invoice_show', $invoice->id);
+        if ($request->payment_method != 'Hutang') {
+            Alert::toast('Pembayaran berhasil!', 'success');
+            return redirect()->route('invoice_show', $invoice->id);
+        }
+        else {
+            Alert::toast('Resi berhasil masuk daftar hutang!', 'success');
+            return redirect()->route('invoice_index');
+        }
+    }
+
+    public function beliobat()
+    {
+        return view('kasir.obat', [
+            'pagetitle' => 'Beli Obat',
+            'pagedesc' => null,
+            'pageid' => 'beliobat',
+        ]);
+    }
+
+    public function beliobat_store()
+    {
+
     }
 
     // public function edit($id)

@@ -233,9 +233,10 @@ Route::group(['middleware' => ['auth']], function()
         {
             Route::get('/invoice', [InvoiceController::class, 'index'])->name('_index');
             Route::get('/invoice/create', [InvoiceController::class, 'create'])->name('_create');
+            Route::get('/invoice/obat', [InvoiceController::class, 'beliobat'])->name('_obat');
             Route::get('/invoice/{invoice}', [InvoiceController::class, 'show'])->name('_show');
             Route::get('/invoice/bayar/{invoice}', [InvoiceController::class, 'pay'])->name('_pay');
-            Route::patch('/invoice/bayar/process', [InvoiceController::class, 'pay_process'])->name('_pay_process');
+            Route::patch('/invoice/bayar/process/{invoice}', [InvoiceController::class, 'pay_process'])->name('_pay_process');
             # Method Error Handle
             Route::get('/invoice/bayar/process', [InvoiceController::class, 'get_error']);
         });
